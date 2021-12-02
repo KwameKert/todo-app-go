@@ -49,7 +49,7 @@ func (u *userServiceLayer) FetchUsers() core.Response {
 func (u *userServiceLayer) GetUser(id int) core.Response {
 	user := models.User{}
 	if err := u.repository.Users.Get(&user, id); err != nil {
-		return core.Error(err, nil)
+		return core.BadRequest(err, nil)
 	}
 
 	return core.Success(&map[string]interface{}{
