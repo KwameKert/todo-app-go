@@ -36,18 +36,23 @@ func (u *userServiceLayer) CreateUser(req core.CreateUserRequest) core.Response 
 }
 
 func (u *userServiceLayer) FetchUsers() core.Response {
-	user := models.User{}
-	if err := u.repository.Users.Fetch(&user); err != nil {
+	var users []models.User
+	err := u.repository.Users.Fetch(&users)
+	if err != nil {
 		return core.Error(err, nil)
+	}
+	if len(users) < 1 {
+		return core.NoContentFound(err, core.String("No users found"))
 	}
 
 	return core.Success(&map[string]interface{}{
-		"user": user,
+		"users": users,
 	}, core.String("users found successfully"))
 }
 
 func (u *userServiceLayer) GetUser(id int) core.Response {
 	user := models.User{}
+
 	if err := u.repository.Users.Get(&user, id); err != nil {
 		return core.BadRequest(err, nil)
 	}
@@ -55,4 +60,18 @@ func (u *userServiceLayer) GetUser(id int) core.Response {
 	return core.Success(&map[string]interface{}{
 		"user": user,
 	}, core.String("users found successfully"))
+}
+
+func (u *userServiceLayer) DeleteUser(id int) core.Response {
+	user := models.User{}
+
+	if err := u.repository.Users.Get(&user, id); err != nil {
+		return core.BadRequest(err, nil)
+	}
+
+	if err := u.repository.Users.Delete(&user, id); err != nil {
+		return core.BadRequest(err, nil)
+	}
+
+	return core.Success(&map[string]interface{}{}, core.String("user deleted successfully"))
 }

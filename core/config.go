@@ -73,6 +73,6 @@ func NewConfig() *Config {
 		DATABASE_URL:   Get("DATABASE_URL", ""),
 		PORT:           GetInt("PORT", 5454),
 		ENVIRONMENT:    GetEnvironment(),
-		RUN_SEEDS:      true,
+		RUN_SEEDS:      false,
 	}
 }

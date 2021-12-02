@@ -55,6 +55,25 @@ func BadRequest(err error, m *string) Response {
 	}
 }
 
+func NoContentFound(err error, m *string) Response {
+
+	var message string
+	if m == nil {
+		message = err.Error()
+	} else {
+		message = StringValue(m)
+	}
+
+	return Response{
+		Error: true,
+		Code:  http.StatusNoContent,
+		Meta: Meta{
+			Data:    nil,
+			Message: message,
+		},
+	}
+}
+
 func Success(data *map[string]interface{}, m *string) Response {
 
 	var message string

@@ -52,14 +52,25 @@ func RegisterUserRoutes(e *gin.Engine, s services.Services) {
 		idStr := c.Param("id")
 		id, _ := strconv.Atoi(idStr)
 		response := s.UserService.GetUser(id)
-
 		if response.Error {
 			c.JSON(response.Code, gin.H{
 				"message": response.Meta.Message,
 			})
 			return
 		}
+		c.JSON(response.Code, response.Meta)
+	})
 
+	e.DELETE("/users/:id", func(c *gin.Context) {
+		idStr := c.Param("id")
+		id, _ := strconv.Atoi(idStr)
+		response := s.UserService.DeleteUser(id)
+		if response.Error {
+			c.JSON(response.Code, gin.H{
+				"message": response.Meta.Message,
+			})
+			return
+		}
 		c.JSON(response.Code, response.Meta)
 	})
 

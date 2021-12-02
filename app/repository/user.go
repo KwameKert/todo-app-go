@@ -25,19 +25,8 @@ func (ul *userLayer) Create(user *models.User) error {
 	return nil
 }
 
-func (ul *userLayer) Fetch(user *models.User) error {
+func (ul *userLayer) Fetch(user *[]models.User) error {
 
-	// 	result := ul.db.Find(&user)
-	// 	if result.Error != nil {
-	// 	   log.Error("error -->", result.Error)
-	// 	   return result.Error
-	//    }
-	//    if result.RowsAffected >0 {
-	// 	   return nil
-	//    }
-	//    return nil
-
-	//check if user list is empty and return 204
 	if err := ul.db.Find(&user).Error; err != nil {
 		log.Error("error -->", err)
 		return err
@@ -49,6 +38,14 @@ func (ul *userLayer) Get(user *models.User, id int) error {
 
 	if err := ul.db.Find(&user, id).First(&user).Error; err != nil {
 
+		return err
+	}
+	return nil
+}
+
+func (ul *userLayer) Delete(user *models.User, id int) error {
+
+	if err := ul.db.Delete(&user, id).Error; err != nil {
 		return err
 	}
 	return nil
