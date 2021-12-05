@@ -30,7 +30,7 @@ func NewHTTPServer(cfg *Config) *Server {
 
 		c.Next()
 	})
-	engine.GET("/", func(c *gin.Context) {
+	engine.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"status": "OK",
 		})

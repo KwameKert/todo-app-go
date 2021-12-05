@@ -4,6 +4,10 @@ import (
 	//"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
+
+	"os"
 	// "strconv"
 	"gorm.io/gorm"
 
@@ -19,7 +23,7 @@ import (
 )
 
 type App struct {
-	//router *mux.Router
+	router *mux.Router
 }
 
 func init() {
@@ -58,8 +62,18 @@ func setupDatabase(conf *core.Config) *gorm.DB {
 	return pg
 }
 
+func (app *App) initRouters() {
+	app.router.HandleFunc("/health", status)
+}
+
 func status(w http.ResponseWriter, r *http.Request) {
 	response := make(map[string]string)
 	response["status"] = "API is up and working!"
 	utils.RespondJson(w, http.StatusOK, response)
+
+}
+
+func (app *App) run(addr string) {
+	loggedRouter := handlers.LoggingHandler(os.Stdout, app.router)
+	http.ListenAndServe(addr, loggedRouter)
 }

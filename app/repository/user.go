@@ -27,7 +27,7 @@ func (ul *userLayer) Create(user *models.User) error {
 
 func (ul *userLayer) Fetch(user *[]models.User) error {
 
-	if err := ul.db.Find(&user).Error; err != nil {
+	if err := ul.db.Preload("Tasks").Find(&user).Error; err != nil {
 		log.Error("error -->", err)
 		return err
 	}

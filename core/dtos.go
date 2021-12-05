@@ -25,6 +25,12 @@ type CreateUserRequest struct {
 	Password string `json:"password"`
 }
 
+type CreateTaskRequest struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	UserId      int    `json:"user_id"`
+}
+
 type CreatePaymentRequest struct {
 	From        int    `json:"from"`
 	To          int    `json:"to"`

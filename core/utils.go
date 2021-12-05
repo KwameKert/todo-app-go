@@ -65,7 +65,7 @@ func NoContentFound(err error, m *string) Response {
 	}
 
 	return Response{
-		Error: true,
+		Error: false,
 		Code:  http.StatusNoContent,
 		Meta: Meta{
 			Data:    nil,
