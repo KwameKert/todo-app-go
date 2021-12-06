@@ -2,12 +2,7 @@ package app
 
 import (
 	//"encoding/json"
-	"net/http"
 
-	"github.com/gorilla/handlers"
-	"github.com/gorilla/mux"
-
-	"os"
 	// "strconv"
 	"gorm.io/gorm"
 
@@ -15,16 +10,13 @@ import (
 	"todo/app/repository"
 	"todo/app/routes"
 	"todo/app/services"
-	"todo/app/utils"
 	"todo/core"
 	"todo/core/database"
 
 	log "github.com/sirupsen/logrus"
 )
 
-type App struct {
-	router *mux.Router
-}
+type App struct{}
 
 func init() {
 	log.SetFormatter(&log.TextFormatter{})
@@ -60,20 +52,4 @@ func setupDatabase(conf *core.Config) *gorm.DB {
 		models.RunSeeds(pg)
 	}
 	return pg
-}
-
-func (app *App) initRouters() {
-	app.router.HandleFunc("/health", status)
-}
-
-func status(w http.ResponseWriter, r *http.Request) {
-	response := make(map[string]string)
-	response["status"] = "API is up and working!"
-	utils.RespondJson(w, http.StatusOK, response)
-
-}
-
-func (app *App) run(addr string) {
-	loggedRouter := handlers.LoggingHandler(os.Stdout, app.router)
-	http.ListenAndServe(addr, loggedRouter)
 }

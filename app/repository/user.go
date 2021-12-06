@@ -27,7 +27,7 @@ func (ul *userLayer) Create(user *models.User) error {
 
 func (ul *userLayer) Fetch(user *[]models.User) error {
 
-	if err := ul.db.Preload("Tasks").Find(&user).Error; err != nil {
+	if err := ul.db.Find(&user).Error; err != nil {
 		log.Error("error -->", err)
 		return err
 	}
@@ -36,7 +36,7 @@ func (ul *userLayer) Fetch(user *[]models.User) error {
 
 func (ul *userLayer) Get(user *models.User, id int) error {
 
-	if err := ul.db.Find(&user, id).First(&user).Error; err != nil {
+	if err := ul.db.Preload("Tasks").Find(&user, id).First(&user).Error; err != nil {
 
 		return err
 	}
@@ -49,4 +49,14 @@ func (ul *userLayer) Delete(user *models.User, id int) error {
 		return err
 	}
 	return nil
+}
+
+//work on user update here
+
+func (ul *userLayer) Update(user *models.User) (*models.User, error) {
+	if err := ul.db.Save(&user).Error; err != nil {
+		log.Info(err)
+		return nil, err
+	}
+	return user, nil
 }

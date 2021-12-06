@@ -75,3 +75,19 @@ func (u *userServiceLayer) DeleteUser(id int) core.Response {
 
 	return core.Success(&map[string]interface{}{}, core.String("user deleted successfully"))
 }
+
+func (u *userServiceLayer) UpdateUser(user models.User) core.Response {
+	userDTO := models.User{}
+
+	if err := u.repository.Users.Get(&userDTO, user.Id); err != nil {
+		return core.BadRequest(err, nil)
+	}
+	userUpdated, err := u.repository.Users.Update(&user)
+	if err != nil {
+		return core.Error(err, nil)
+	}
+
+	return core.Success(&map[string]interface{}{
+		"user": userUpdated,
+	}, core.String("users updated successfully"))
+}
